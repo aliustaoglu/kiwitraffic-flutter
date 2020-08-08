@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kiwitraffic/theme.dart';
+import 'package:kiwitraffic/views/auckland.dart';
 import 'package:kiwitraffic/views/header.dart';
 import 'package:kiwitraffic/views/home.dart';
 
@@ -18,7 +19,7 @@ class _AppState extends State<App> {
         initialRoute: '/home',
         routes: {
           '/home': (context) => Container( child: scaffold, ),
-          
+          '/auckland': (context) => Auckland()
         }
     );
   }
