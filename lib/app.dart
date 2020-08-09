@@ -18,7 +18,7 @@ class _AppState extends State<App> {
       home: scaffold,
         initialRoute: '/home',
         routes: {
-          '/home': (context) => Container( child: scaffold, ),
+          '/home': (context) => scaffold,
           '/auckland': (context) => Auckland()
         }
     );
