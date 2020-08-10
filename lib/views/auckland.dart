@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kiwitraffic/models/CameraModel.dart';
 import 'package:platform_maps_flutter/platform_maps_flutter.dart';
+import 'package:kiwitraffic/utils/aucklandUtil.dart' as aucklandUtil;
 
 class Auckland extends StatefulWidget {
   @override
@@ -8,29 +10,34 @@ class Auckland extends StatefulWidget {
 
 class _AucklandState extends State<Auckland> {
   BitmapDescriptor pinLocationIcon;
+
   var markers = Set<Marker>.of([]);
 
   setMarker() async {
-    var icn = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), 'assets/images/logo.png');
+    List<CameraModel> cameras = await aucklandUtil.getCameras();
+    var icn = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 1.1), 'assets/icons/traffic-cams.png');
     setState(() {
-      var marker = Marker(
-        markerId: MarkerId('marker_1'),
-        position: LatLng(47.6, 8.8796),
-        icon: pinLocationIcon,
-        consumeTapEvents: true,
-        infoWindow: InfoWindow(
-            title: 'PlatformMarker',
-            snippet: "Hi I'm a Platform Marker",
-            onTap: () {
-              print("InfoWindow tapped");
-            }),
-        onTap: () {
-          print("Marker tapped");
-        },
-      );
-      markers = Set<Marker>.of([
-        marker
-      ]);
+      List<Marker> lst = [];
+      cameras.forEach((camera){
+        var marker = Marker(
+          markerId: MarkerId(camera.id),
+          position: LatLng(-36, 174),
+          icon: icn,
+          consumeTapEvents: true,
+          infoWindow: InfoWindow(
+              title: 'PlatformMarker',
+              snippet: "Hi I'm a Platform Marker",
+              onTap: () {
+                print("InfoWindow tapped");
+              }),
+          onTap: () {
+            print("Marker tapped");
+          },
+        );
+        lst.add(marker);
+      });
+
+      markers = Set<Marker>.of(lst);
     });
 
   }
@@ -38,16 +45,19 @@ class _AucklandState extends State<Auckland> {
   @override
   void initState() {
     super.initState();
-
+    setMarker();
 
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Auckland Traffic'),
+      ),
       body: PlatformMap(
         initialCameraPosition: CameraPosition(
-          target: const LatLng(47.6, 8.8796),
+          target: const LatLng(-36, 174),
           zoom: 16.0,
         ),
         markers: markers,
@@ -61,10 +71,10 @@ class _AucklandState extends State<Auckland> {
               controller.animateCamera(
                 CameraUpdate.newCameraPosition(
                   const CameraPosition(
-                    bearing: 270.0,
-                    target: LatLng(51.5160895, -0.1294527),
-                    tilt: 30.0,
-                    zoom: 18,
+
+                    target: LatLng(-36, 174),
+
+                    zoom: 8,
                   ),
                 ),
               );
