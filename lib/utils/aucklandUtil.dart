@@ -23,15 +23,15 @@ Future<List<CameraModel>> getCameras() async {
     cam.direction = camera.getElement('tns:direction')?.text;
     cam.group = camera.getElement('tns:group')?.text;
     cam.id = camera.getElement('tns:id')?.text;
-    cam.imageUrl = camera.getElement('tns:id')?.text;
-    cam.lat = camera.getElement('tns:id')?.text;
-    cam.lng = camera.getElement('tns:id')?.text;
-    cam.name = camera.getElement('tns:id')?.text;
-    cam.offline = camera.getElement('tns:id')?.text;
-    cam.region = camera.getElement('tns:id')?.text;
-    cam.thumbUrl = camera.getElement('tns:id')?.text;
-    cam.underMaintenance = camera.getElement('tns:id')?.text;
-    cam.viewUrl = camera.getElement('tns:id')?.text;
+    cam.imageUrl = camera.getElement('tns:imageUrl')?.text;
+    cam.lat = double.parse(camera.getElement('tns:lat')?.text);
+    cam.lng = double.parse(camera.getElement('tns:lon')?.text);
+    cam.name = camera.getElement('tns:name')?.text;
+    cam.offline = camera.getElement('tns:offline')?.text;
+    cam.region = camera.getElement('tns:region')?.text;
+    cam.thumbUrl = camera.getElement('tns:thumbUrl')?.text;
+    cam.underMaintenance = camera.getElement('tns:underMaintenance')?.text;
+    cam.viewUrl = camera.getElement('tns:viewUrl')?.text;
     return cam;
   });
 

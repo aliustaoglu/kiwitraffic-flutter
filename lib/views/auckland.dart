@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kiwitraffic/models/CameraModel.dart';
+import 'package:kiwitraffic/views/cameraBottomSheet.dart';
+import 'package:kiwitraffic/views/home.dart';
 import 'package:platform_maps_flutter/platform_maps_flutter.dart';
 import 'package:kiwitraffic/utils/aucklandUtil.dart' as aucklandUtil;
 
@@ -15,38 +17,36 @@ class _AucklandState extends State<Auckland> {
 
   setMarker() async {
     List<CameraModel> cameras = await aucklandUtil.getCameras();
-    var icn = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 1.1), 'assets/icons/traffic-cams.png');
-    setState(() {
-      List<Marker> lst = [];
-      cameras.forEach((camera){
-        var marker = Marker(
-          markerId: MarkerId(camera.id),
-          position: LatLng(-36, 174),
-          icon: icn,
-          consumeTapEvents: true,
-          infoWindow: InfoWindow(
-              title: 'PlatformMarker',
-              snippet: "Hi I'm a Platform Marker",
-              onTap: () {
-                print("InfoWindow tapped");
-              }),
-          onTap: () {
-            print("Marker tapped");
-          },
-        );
-        lst.add(marker);
-      });
+    var icn = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 1.1),
+        'assets/icons/traffic-cams.png');
 
+    List<Marker> lst = [];
+    cameras.forEach((camera) {
+      var marker = Marker(
+        markerId: MarkerId(camera.id),
+        position: LatLng(camera.lat, camera.lng),
+        icon: icn,
+        consumeTapEvents: true,
+        onTap: () {
+          showModalBottomSheet<void>(
+              context: context,
+              builder: (context) {
+                return CameraBottomSheet(camera);
+              });
+        },
+      );
+      lst.add(marker);
+    });
+    setState(() {
       markers = Set<Marker>.of(lst);
     });
-
   }
 
   @override
   void initState() {
-    super.initState();
     setMarker();
-
+    super.initState();
   }
 
   @override
@@ -56,6 +56,7 @@ class _AucklandState extends State<Auckland> {
         title: Text('Auckland Traffic'),
       ),
       body: PlatformMap(
+        trafficEnabled: true,
         initialCameraPosition: CameraPosition(
           target: const LatLng(-36, 174),
           zoom: 16.0,
@@ -63,7 +64,7 @@ class _AucklandState extends State<Auckland> {
         markers: markers,
         myLocationEnabled: true,
         myLocationButtonEnabled: true,
-        onTap: (location) => print('onTap: $location'),
+//        onTap: (location) => print('onTap: $location'),
         compassEnabled: true,
         onMapCreated: (controller) {
           Future.delayed(Duration(seconds: 2)).then(
@@ -71,9 +72,7 @@ class _AucklandState extends State<Auckland> {
               controller.animateCamera(
                 CameraUpdate.newCameraPosition(
                   const CameraPosition(
-
                     target: LatLng(-36, 174),
-
                     zoom: 8,
                   ),
                 ),

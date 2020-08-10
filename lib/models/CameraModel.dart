@@ -4,8 +4,8 @@ class CameraModel {
   String group;
   String id;
   String imageUrl;
-  String lat;
-  String lng;
+  double lat;
+  double lng;
   String name;
   String offline;
   String region;
