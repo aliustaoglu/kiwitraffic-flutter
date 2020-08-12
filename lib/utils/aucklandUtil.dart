@@ -32,6 +32,21 @@ Future<List<CameraModel>> getCameras() async {
     cam.thumbUrl = camera.getElement('tns:thumbUrl')?.text;
     cam.underMaintenance = camera.getElement('tns:underMaintenance')?.text;
     cam.viewUrl = camera.getElement('tns:viewUrl')?.text;
+    cam.congestions = new List<Congestion>();
+
+    var congestionLocations = camera.findAllElements('tns:congestionLocations');
+    if (congestionLocations.length > 0) {
+      for (var congestionLocation in congestionLocations){
+        Congestion congestion = new Congestion();
+        congestion.congestion = congestionLocation.getElement('tns:congestion').text;
+        congestion.direction= congestionLocation.getElement('tns:direction').text;
+        congestion.name= congestionLocation.getElement('tns:name').text;
+        cam.congestions.add(congestion);
+      }
+
+
+    }
+
     return cam;
   });
 

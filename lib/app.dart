@@ -4,6 +4,7 @@ import 'package:kiwitraffic/theme.dart';
 import 'package:kiwitraffic/views/auckland.dart';
 import 'package:kiwitraffic/views/header.dart';
 import 'package:kiwitraffic/views/home.dart';
+import 'package:kiwitraffic/views/cameraModal.dart';
 
 class App extends StatefulWidget {
   @override
@@ -19,7 +20,8 @@ class _AppState extends State<App> {
         initialRoute: '/home',
         routes: {
           '/home': (context) => scaffold,
-          '/auckland': (context) => Auckland()
+          '/auckland': (context) => Auckland(),
+          'auckland/camera': (context) => CameraModal()
         }
     );
   }

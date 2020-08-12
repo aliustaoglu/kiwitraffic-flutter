@@ -28,7 +28,9 @@ class HomeBody extends StatelessWidget {
         Expanded(
           child: Row(
             children: [
-              ActionButton('assets/images/camera.jpg', 'Cameras', (){}),
+              ActionButton('assets/images/camera.jpg', 'Cameras', (){
+
+              }),
               ActionButton('assets/images/highway.jpg', 'Highway Status', (){})
             ],
           ),

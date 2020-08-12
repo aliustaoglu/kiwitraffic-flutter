@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kiwitraffic/models/CameraModel.dart';
-import 'package:kiwitraffic/views/cameraBottomSheet.dart';
+import 'package:kiwitraffic/views/cameraModal.dart';
 import 'package:kiwitraffic/views/home.dart';
 import 'package:platform_maps_flutter/platform_maps_flutter.dart';
 import 'package:kiwitraffic/utils/aucklandUtil.dart' as aucklandUtil;
@@ -29,11 +29,7 @@ class _AucklandState extends State<Auckland> {
         icon: icn,
         consumeTapEvents: true,
         onTap: () {
-          showModalBottomSheet<void>(
-              context: context,
-              builder: (context) {
-                return CameraBottomSheet(camera);
-              });
+          Navigator.pushNamed(context, 'auckland/camera', arguments: camera);
         },
       );
       lst.add(marker);
@@ -69,11 +65,11 @@ class _AucklandState extends State<Auckland> {
         onMapCreated: (controller) {
           Future.delayed(Duration(seconds: 2)).then(
             (_) {
-              controller.animateCamera(
+              controller.moveCamera(
                 CameraUpdate.newCameraPosition(
                   const CameraPosition(
-                    target: LatLng(-36, 174),
-                    zoom: 8,
+                    target: LatLng(-36.8483, 174.7625),
+                    zoom: 10
                   ),
                 ),
               );

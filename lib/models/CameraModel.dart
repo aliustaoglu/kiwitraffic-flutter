@@ -1,3 +1,10 @@
+class Congestion {
+  String congestion;
+  String direction;
+  String inOut;
+  String name;
+}
+
 class CameraModel {
   String description;
   String direction;
@@ -12,4 +19,5 @@ class CameraModel {
   String thumbUrl;
   String underMaintenance;
   String viewUrl;
+  List<Congestion> congestions;
 }
