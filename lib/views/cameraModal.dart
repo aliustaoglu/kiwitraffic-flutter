@@ -38,6 +38,7 @@ class _CameraModalState extends State<CameraModal> {
     return Scaffold(
       appBar: AppBar(
         title: Text(camera.name),
+        actions: [],
       ),
       body: Container(
         color: Color.fromARGB(255, 29, 32, 50),

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kiwitraffic/models/CameraModel.dart';
+import 'package:kiwitraffic/models/TrafficModel.dart';
 import 'package:kiwitraffic/utils/endpoints.dart' as endpoints;
 import 'package:xml/xml.dart';
 
+const headers = {
+  'username': 'user',
+  'password': 'pass'
+};
+
 Future<List<CameraModel>> getCameras() async {
-  var resCamera = await http.get(endpoints.aucklandCameras, headers: {
-    'username': 'user',
-    'password': 'pass'
-  });
+  var resCamera = await http.get(endpoints.aucklandCameras, headers: headers);
   final document = XmlDocument.parse(resCamera.body);
 
   List<XmlNode> cameras = document.children[1].children;
@@ -51,4 +54,27 @@ Future<List<CameraModel>> getCameras() async {
   });
 
   return listOfCams.toList();
+}
+
+Future<List<TrafficModel>> getTraffic() async {
+  final resTraffic = await http.get(endpoints.aucklandTrafficConditions, headers: headers);
+  final document = XmlDocument.parse(resTraffic.body);
+  List<TrafficModel> listTraffic = new List<TrafficModel>();
+  List<XmlNode> motorways = document.getElement('tns:getTrafficConditionsResponse').getElement('tns:trafficConditions').children;
+  for (XmlElement motorway in motorways) {
+    if (motorway.name.toString() == 'tns:motorways') {
+      for (XmlElement location in motorway.children) {
+        if (location.name.toString() == 'tns:locations') {
+          TrafficModel t = new TrafficModel();
+          t.congestion = location.getElement('tns:congestion').text;
+          t.name= location.getElement('tns:name').text;
+          t.direction = location.getElement('tns:direction').text;
+          t.inOut = location.getElement('tns:inOut').text;
+          listTraffic.add(t);
+        }
+      }
+    }
+  }
+  return listTraffic;
+  
 }
