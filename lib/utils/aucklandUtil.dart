@@ -4,11 +4,8 @@ import 'package:kiwitraffic/models/CameraModel.dart';
 import 'package:kiwitraffic/models/TrafficModel.dart';
 import 'package:kiwitraffic/utils/endpoints.dart' as endpoints;
 import 'package:xml/xml.dart';
+import 'package:kiwitraffic/utils/headers.dart';
 
-const headers = {
-  'username': 'user',
-  'password': 'pass'
-};
 
 Future<List<CameraModel>> getCameras() async {
   var resCamera = await http.get(endpoints.aucklandCameras, headers: headers);
@@ -77,4 +74,24 @@ Future<List<TrafficModel>> getTraffic() async {
   }
   return listTraffic;
   
+}
+
+Future<List<TrafficSigns>> getTrafficSigns() async {
+  var trafficSigns = new List<TrafficSigns>();
+  final resSigns = await http.get(endpoints.aucklandSigns, headers: headers);
+  final document = XmlDocument.parse(resSigns.body);
+  for (XmlElement sign in document.getElement("tns:getSignsResponse").children) {
+    if (sign.getElement('tns:current-message').text != '') {
+      TrafficSigns trafficSign = new TrafficSigns();
+      trafficSign.identifier = sign.getElement('tns:identifier').text;
+      trafficSign.name = sign.getElement('tns:name').text;
+      trafficSign.description = sign.getElement('tns:description').text;
+      trafficSign.currentMessage = sign.getElement('tns:current-message').text.replaceAll('[nl]', ' ').replaceAll('[np]', ' ');
+      trafficSign.lastUpdate = sign.getElement('tns:last-update').text;
+      trafficSign.lat = double.tryParse(sign.getElement('tns:lat').text) ?? 0;
+      trafficSign.lng = double.tryParse(sign.getElement('tns:lon').text) ?? 0;
+      trafficSigns.add(trafficSign);
+    }
+  }
+  return trafficSigns;
 }

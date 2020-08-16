@@ -18,6 +18,7 @@ class _AucklandState extends State<Auckland> {
   BitmapDescriptor pinLocationIcon;
 
   var markers = Set<Marker>();
+  var signs = Set<Marker>();
   var polylines = Set<Polyline>();
   var polylinesFree = Set<Polyline>();
   var polylinesModerate = Set<Polyline>();
@@ -90,10 +91,35 @@ class _AucklandState extends State<Auckland> {
     });
   }
 
+  setTrafficSigns() async {
+    List<TrafficSigns> listTrafficSigns = await aucklandUtil.getTrafficSigns();
+    var icn = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 1.1),
+        'assets/icons/info.png');
+
+    List<Marker> markersSign = [];
+    listTrafficSigns.forEach((sign) {
+      var marker = Marker(
+        markerId: MarkerId(sign.identifier),
+        position: LatLng(sign.lat, sign.lng),
+        icon: icn,
+        infoWindow: InfoWindow(
+          title: sign.name,
+          snippet: sign.currentMessage
+        )
+      );
+      markersSign.add(marker);
+    });
+    setState(() {
+      signs = Set<Marker>.of(markersSign);
+    });
+  }
+
   @override
   void initState() {
     setMarker();
     setPolylines();
+    setTrafficSigns();
     super.initState();
   }
 
@@ -110,11 +136,10 @@ class _AucklandState extends State<Auckland> {
           target: const LatLng(-36, 174),
           zoom: 16.0,
         ),
-        markers: markers,
+        markers: Set<Marker>.of([...markers, ...signs]),
         polylines: polylines,
         myLocationEnabled: true,
         myLocationButtonEnabled: true,
-//        onTap: (location) => print('onTap: $location'),
         compassEnabled: true,
         onMapCreated: (controller) {
           controller.moveCamera(

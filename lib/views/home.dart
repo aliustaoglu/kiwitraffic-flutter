@@ -21,7 +21,9 @@ class HomeBody extends StatelessWidget {
               ActionButton('assets/images/auckland.jpg', 'Auckland Traffic', (){
                 Navigator.of(context).pushNamed('/auckland');
               }),
-              ActionButton('assets/images/christchurch.jpg', 'Christchurch Roads', (){})
+              ActionButton('assets/images/christchurch.jpg', 'Christchurch Roads', (){
+                Navigator.of(context).pushNamed('/christchurch');
+              })
             ],
           ),
         ),
@@ -29,9 +31,11 @@ class HomeBody extends StatelessWidget {
           child: Row(
             children: [
               ActionButton('assets/images/camera.jpg', 'Cameras', (){
-
+                Navigator.of(context).pushNamed('/camera');
               }),
-              ActionButton('assets/images/highway.jpg', 'Highway Status', (){})
+              ActionButton('assets/images/highway.jpg', 'Highway Status', (){
+                Navigator.of(context).pushNamed('/highway');
+              })
             ],
           ),
         )
