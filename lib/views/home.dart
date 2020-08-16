@@ -2,13 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:kiwitraffic/components/ActionButton.dart';
 import 'package:kiwitraffic/views/header.dart';
 import 'package:kiwitraffic/views/navBar.dart';
+import 'package:kiwitraffic/views/about.dart';
 
-Scaffold scaffold = Scaffold(
-  body: HomeBody(),
-  backgroundColor: Color.fromARGB(255, 29, 32, 50),
-  appBar: appBar,
-  bottomNavigationBar: navBar,
-);
+class HomeScaffold extends StatefulWidget {
+  @override
+  _HomeScaffoldState createState() => _HomeScaffoldState();
+}
+
+class _HomeScaffoldState extends State<HomeScaffold> {
+  int currentTab = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: currentTab == 0 ? HomeBody() : About(),
+      backgroundColor: Color.fromARGB(255, 29, 32, 50),
+      appBar: appBar,
+      bottomNavigationBar: navBar((selectedTab){
+        setState(() {
+          currentTab = selectedTab;
+        });
+      }),
+    );
+  }
+}
+
 
 class HomeBody extends StatelessWidget {
   @override
@@ -43,4 +61,3 @@ class HomeBody extends StatelessWidget {
     );;
   }
 }
-

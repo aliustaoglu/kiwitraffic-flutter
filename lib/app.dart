@@ -20,10 +20,10 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: themeData,
-      home: scaffold,
+      home: HomeScaffold(),
         initialRoute: '/home',
         routes: {
-          '/home': (context) => scaffold,
+          '/home': (context) => HomeScaffold(),
           '/auckland': (context) => Auckland(),
           'auckland/camera': (context) => CameraModal(),
           '/camera': (context) => Camera(),
